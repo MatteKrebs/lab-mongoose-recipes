@@ -5,18 +5,27 @@ const Recipe = require('./models/Recipe.model');
 // Import of the data from './data.json'
 const data = require('./data');
 
-const MONGODB_URI = 'mongodb://localhost:27017/recipe-app';
+const MONGODB_URI = 'mongodb://127.0.0.1/recipe-app';
+mongoose.set('strictQuery', false);
 
-// Connection to the database "recipe-app"
 mongoose
   .connect(MONGODB_URI)
   .then(x => {
     console.log(`Connected to the database: "${x.connection.name}"`);
-    // Before adding any recipes to the database, let's remove all existing ones
+    
     return Recipe.deleteMany()
   })
   .then(() => {
-    // Run your code here, after you have insured that the connection was made
+    const firstRecipe = new Recipe({
+      title: 'Dog Cookies',
+      level: 'Easy Peasy',
+      ingredients: ['1 cup flour', '1 cup dry food', '2 eggs', '2 carrots', '20 oz fuet', 'Any table scraps of meat'],
+      cuisine: 'For dogs!',
+      dishType: 'other',
+      duration: 30,
+      creator: 'Matt Krebs',
+    });
+      return firstRecipe.save();
   })
   .catch(error => {
     console.error('Error connecting to the database', error);
